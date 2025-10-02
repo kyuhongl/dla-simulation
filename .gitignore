@@ -1,0 +1,77 @@
+# OpenFrameworks build artifacts
+bin/
+obj/
+*.o
+*.d
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
+.DS_Store
+build/
+DerivedData/
+
+# Visual Studio
+*.vcxproj.user
+*.vcxproj.filters
+*.sln.docstates
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Code::Blocks
+*.depend
+*.layout
+*.cbp
+
+# Qt Creator
+CMakeLists.txt.user*
+
+# Makefile generated files
+*.make
+
+# Temporary files
+*~
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Screenshots and exports (optional - uncomment if you don't want to track these)
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
+# *.mov
+# *.mp4
+
+# Addon specific
+addons.make
