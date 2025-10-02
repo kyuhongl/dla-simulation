@@ -37,6 +37,7 @@ private:
     ofParameter<bool> deterministic;
     ofParameter<bool> drawLines;
     ofParameter<bool> drawPoints;
+    ofParameter<bool> drawWalkers;
     ofParameter<bool> fadeTrails;
     ofParameter<bool> autoPauseOnMax;
 
@@ -71,4 +72,20 @@ private:
 
     // Cached query buffer
     std::vector<int> neighborCandidates;
+    
+    // Shaders
+    ofShader testShader;
+    ofShader backgroundShader;
+    bool shaderLoaded = false;
+    bool shaderEnabled = true;
+    bool backgroundShaderLoaded = false;
+    
+    // GIF recording
+    bool isRecordingGif = false;
+    int gifFrameCount = 0;
+    int gifTotalFrames = 90; // 3 seconds at 30fps
+    std::string gifFolderPath;
+    void startGifRecording();
+    void updateGifRecording();
+    void finishGifRecording();
 };
