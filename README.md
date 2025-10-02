@@ -1,154 +1,110 @@
-# DLA Simulation with Organic Shaders ✨
+# DLA Simulation with Organic Shaders
 
-A real-time generative art piece using Diffusion Limited Aggregation. Watch as particles randomly walk around and stick together, creating beautiful branching structures that look like coral, lightning, or neural networks.
+Real-time Diffusion Limited Aggregation simulation with custom lighting and visual effects.
 
-Heavily inspired by [Sage Jenson's incredible 36 Points](https://www.sagejenson.com/36points/) - check out their work, it's amazing!
+Inspired by [Sage Jenson's 36 Points](https://www.sagejenson.com/36points/).
 
-## What is this?
-
-Particles spawn around a center seed and randomly wander until they bump into the growing structure and stick. It creates these gorgeous organic fractal patterns. Add some fancy lighting shaders and an animated wispy background, and you've got yourself some eye candy.
-
-## Cool Features
+## Features
 
 - Real-time particle simulation (up to 8000+ particles)
-- Beautiful beige/gold color palette with glass-like lighting
-- Neural pulse waves that propagate from center to edges
-- Wispy animated dark navy background
-- Interactive controls - tweak everything in real-time
-- GIF recording (press `G` for 3 seconds of footage)
-- Spatial hashing for buttery smooth performance
-- Deterministic mode if you want the same pattern twice
+- Phong lighting with glass-like particle rendering
+- Neural pulse waves propagating from center
+- Animated noise-based background
+- GIF recording
+- Spatial hashing for performance optimization
+- Deterministic mode for reproducible results
 
-## How it Works
+## Algorithm
 
-1. Start with one particle in the center
-2. Spawn a bunch of "walker" particles around it
-3. Walkers randomly stumble around
-4. When they get close to the cluster, they might stick (it's probability-based)
-5. Stuck particles become part of the structure
-6. Particles that wander too far get respawned
-7. Repeat forever (or until you hit the particle limit)
+1. Seed particle placed at center
+2. Walker particles spawn in random distribution around cluster
+3. Walkers perform random walk
+4. When close to cluster, walkers stick with configurable probability
+5. Stuck particles become part of cluster
+6. Walkers beyond kill radius respawn
 
 ## Controls
 
-### Keyboard
-
+**Keyboard:**
 - `SPACE` - Pause/play
-- `R` - Reset (start over)
+- `R` - Reset
 - `G` - Record 3-second GIF
-- `E` - Export PNG screenshot
-- `H` - Toggle shader effects
+- `E` - Export PNG
+- `H` - Toggle shaders
 - `L` - Toggle lines
-- `P` - Toggle points (stuck particles)
-- `W` - Toggle walkers (moving particles)
+- `P` - Toggle points
+- `W` - Toggle walkers
 - `F` - Toggle fade trails
 - `+`/`-` - Zoom
-- `↑`/`↓` - More/fewer walkers
+- `↑`/`↓` - Adjust walker count
 
-### Mouse
+**Mouse:**
+- Scroll - Zoom
 
-- **Scroll** - Zoom
+## Parameters
 
-## Parameters (GUI Panel)
+**Core:**
+- numWalkers - Active walker particle count
+- stickRadius - Distance threshold for sticking
+- stepSize - Random walk step size
+- stickProb - Sticking probability (0.0-1.0)
 
-Play around with these to get different vibes:
+**Boundaries:**
+- spawnMargin - Walker spawn distance from cluster
+- killMargin - Walker respawn distance
+- maxStuck - Maximum particle count
 
-### Main Stuff
-- **numWalkers**: How many particles are wandering around
-- **stickRadius**: How close walkers need to be to stick
-- **stepSize**: How big each random step is
-- **stickProb**: Chance of actually sticking (0.0 = never, 1.0 = always)
+**Performance:**
+- perfSafeMode - Enable optimizations
+- frameBudgetMs - CPU time budget per frame
+- drawMaxNodes - Node decimation threshold
 
-### Spawn Settings
-- **spawnMargin**: How far from the cluster walkers spawn
-- **killMargin**: How far they can wander before respawning
-- **maxStuck**: Max particles before simulation stops
+## Technical Details
 
-### Visuals
-- **drawLines**: Show the connections
-- **drawPoints**: Show the stuck particles
-- **drawWalkers**: Show the moving particles
-- **fadeTrails**: Subtle fading effect
+**Rendering:**
+- Phong lighting with animated light source
+- Glass-like particle rendering with specular highlights
+- Organic curved lines with variable thickness
+- Neural pulse wave propagation
+- Simplex noise background shader
+- Beige/gold color palette on dark navy background
 
-### Performance
-- **perfSafeMode**: Turn this on if it's laggy
-- **frameBudgetMs**: CPU time per frame (lower = faster but less smooth)
-- **drawMaxNodes**: Start skipping particles after this many
+**Performance:**
+- Spatial hashing for neighbor queries
+- Frame budgeting for distributed computation
+- Batched mesh rendering
+- Automatic decimation for large clusters
+- GLSL 330 vertex/fragment shaders
 
-## Visual Features
-
-### Shaders
-- **Phong lighting** with animated rotating light source
-- **Glass-like beads** - each particle has specular highlights and depth
-- **Organic flowing lines** with subtle waves and variable thickness
-- **Neural pulse waves** - emanate from center every 2 seconds
-- **Wispy background** - animated noise-based gradients in dark navy
-
-### Colors
-- Muted beige/gold particles (inspired by that physarum aesthetic)
-- Dark navy blue background with atmospheric depth
-- Subtle pulse highlights that travel outward
-
-## Tech Stuff
-
-**Performance tricks:**
-- Spatial hashing for fast neighbor lookups
-- Frame budgeting spreads work across frames
-- Batched mesh rendering (not 20k individual draw calls!)
-- Auto-decimation when things get huge
-
-**Shader pipeline:**
-- Vertex/fragment shaders for the DLA
-- Separate background shader with simplex noise
-- All GLSL 330
-
-## Setup
+## Building
 
 **Requirements:**
 - OpenFrameworks 0.12.1+
 - C++11 compiler
 - OpenGL 3.2+
 
-**Building:**
-
-macOS:
+**macOS:**
 ```bash
 make && make RunRelease
 ```
+Or open `emptyExample.xcodeproj` in Xcode.
 
-Or just open `emptyExample.xcodeproj` in Xcode and hit run.
+## GIF Export
 
-## Making GIFs
+Press `G` to record 3 seconds (90 frames). Frames save to `bin/data/gif_frames_TIMESTAMP/`.
 
-1. Press `G` to start recording
-2. Wait 3 seconds (you'll see a red dot)
-3. Frames save to `bin/gif_frames_TIMESTAMP/`
-4. Convert with ffmpeg:
-
+Convert to GIF:
 ```bash
-cd bin
-ffmpeg -i gif_frames_TIMESTAMP/frame_%04d.png -vf "fps=30,scale=800:-1:flags=lanczos" output.gif
+cd bin/data
+ffmpeg -i gif_frames_TIMESTAMP/frame_%04d.png -vf "fps=20,scale=400:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=64[p];[s1][p]paletteuse=dither=bayer" output.gif
 ```
 
-## Tips
+## References
 
-- Start with defaults to see how it works
-- More walkers = faster growth (but more CPU)
-- Lower stickProb = sparser, more branchy structures
-- Hide walkers (`W` key) for cleaner screenshots
-- Turn off shaders (`H`) if it's too slow
-
-## Inspiration & References
-
-This project was heavily inspired by:
-- **[36 Points by Sage Jenson](https://www.sagejenson.com/36points/)** - Seriously, go check this out. It's incredible.
-- The [interactive-physarum](https://github.com/Bleuje/interactive-physarum) project by Bleuje
-- Classic DLA simulations and fractal growth patterns
+- [36 Points by Sage Jenson](https://www.sagejenson.com/36points/)
+- [interactive-physarum by Bleuje](https://github.com/Bleuje/interactive-physarum)
+- [OpenFrameworks](https://openframeworks.cc/)
 
 ## License
 
-Open source, do whatever you want with it. If you make something cool, let me know!
-
----
-
-Built with [OpenFrameworks](https://openframeworks.cc/) 🎨
+Open source.
