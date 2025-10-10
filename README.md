@@ -1,6 +1,10 @@
 # DLA Simulation with Organic Shaders
 
-Real-time Diffusion Limited Aggregation simulation with custom lighting and visual effects.
+<div align="center">
+  <img src="bin/data/dla_animation_2.gif" alt="DLA Simulation Animation" width="600"/>
+  
+  *Real-time Diffusion Limited Aggregation simulation with custom lighting and visual effects*
+</div>
 
 Inspired by [Sage Jenson's 36 Points](https://www.sagejenson.com/36points/).
 
